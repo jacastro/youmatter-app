@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const server = 'http://localhost:19011'
+const server = 'http://158.69.204.48:19011'
 
 export const get = async(url, params) => {
   try {
