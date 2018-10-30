@@ -1,17 +1,19 @@
 import axios from 'axios';
 
+const server = 'http://localhost:19011'
+
 export const get = async(url, params) => {
   try {
-    const result = await axios.get(`https://uade-sem-int-tpo-api.herokuapp.com/${url}`,{ params });
+    const result = await axios.get(`${server}/${url}`,{ params });
     return result.data;
   } catch (error) {
     console.error(error);
   }
 }
 
-export const post = async(url, params) => {
+export const put = async(url, params) => {
   try {
-    const result = await axios.post(`https://uade-sem-int-tpo-api.herokuapp.com/${url}`, params);
+    const result = await axios.put(`${server}/${url}`, params);
     return result.data;
   } catch (error) {
     console.error(error);

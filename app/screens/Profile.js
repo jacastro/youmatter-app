@@ -45,6 +45,7 @@ export class ProfileScreen extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <View useSafeArea margin-20>
         <View style={styles.buttons} flexGrow column>
           <Avatar 
@@ -106,6 +107,7 @@ export class ProfileScreen extends React.Component {
         />
 
       </View>
+      </ScrollView>
     )
   }
 }

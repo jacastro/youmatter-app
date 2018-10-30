@@ -1,9 +1,10 @@
 import React from 'react';
 import { ScrollView, Switch, StyleSheet } from 'react-native';
+import { NavigationEvents } from "react-navigation";
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
 import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-//import { getStudents, saveAttendance } from '../../services/preceptor';
+import { getMyPosts } from './../services';
 
 const posts = [
   {
@@ -29,6 +30,7 @@ export class SearchScreen extends React.Component {
     this.state = {
       half: true,
       students: [],
+      posts: [],
     }
   }
 
@@ -52,13 +54,19 @@ export class SearchScreen extends React.Component {
     }
   };
 
-  saveAttendance = (navigation) => {
-    saveAttendance(this.state.students).then(navigation.goBack())
-  }
+  componentDidMount = () => {
+    getMyPosts().then((data) => this.setState({ posts: data }))
+  };
 
   render() {
     return (
+      <ScrollView>
       <View useSafeArea margin-20>
+        <NavigationEvents
+          onWillFocus={payload => {
+            this.componentDidMount();
+          }}
+        />
         <TextInput
           text40
           containerStyle={{marginBottom: 10}}
@@ -106,7 +114,7 @@ export class SearchScreen extends React.Component {
           </View>
         </View>
 
-        {posts.map((post,i) => 
+        {this.state.posts.map((post,i) => 
           <Card key={i} style={{marginBottom: 15}} onPress={() => console.log('press on a card')}>
             <Card.Image height={160} imageSource={post.coverImage} />
             <Card.Section body>
@@ -118,19 +126,13 @@ export class SearchScreen extends React.Component {
               <Card.Section>
                 <Card.Item>
                   <Text text90 color={Colors.green30}>
-                    {post.status}
+                    {post.type}
                   </Text>
-                  <Text text90> | {post.timestamp}</Text>
                 </Card.Item>
               </Card.Section>
               <Card.Section>
                 <Text text70 color={Colors.dark10}>
-                  {post.description}
-                </Text>
-              </Card.Section>
-              <Card.Section footer>
-                <Text text90 color={Colors.dark50}>
-                  {post.likes} Likes
+                  {post.body}
                 </Text>
               </Card.Section>
             </Card.Section>
@@ -138,6 +140,7 @@ export class SearchScreen extends React.Component {
         )}
         
       </View>
+      </ScrollView>
     )
   }
 }

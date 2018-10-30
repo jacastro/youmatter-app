@@ -3,12 +3,15 @@ import { ScrollView, Switch, StyleSheet, AsyncStorage } from 'react-native';
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
 import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Picker, TagsInput, TextArea} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { join, login } from './../services';
+import { join, login, getPublicationTags } from './../services';
 
 export class JoinScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
+      tags: [],
+      availableTags: [],
+      pickertags: [],
     }
   }
 
@@ -21,6 +24,10 @@ export class JoinScreen extends React.Component {
   toLogin = () => {
     this.props.navigation.navigate('LogIn')
   }
+
+  componentWillMount = () => {
+    getPublicationTags().then((availableTags) => this.setState({ availableTags }))
+  };
 
   render() {
     return (
@@ -44,11 +51,11 @@ export class JoinScreen extends React.Component {
 
         <TextInput
           floatingPlaceholder
-          onChangeText={surname => this.setState({ surname })}
+          onChangeText={lastName => this.setState({ lastName })}
           floatOnFocus
-          value={this.state.surname}
+          value={this.state.lastName}
           placeholder='Apellido'
-        />
+        /> 
 
         <TextInput
           floatingPlaceholder
@@ -65,6 +72,20 @@ export class JoinScreen extends React.Component {
           value={this.state.password}
           placeholder='Password'
         />
+
+        <Picker
+          title="Intereses"
+          placeholder="Intereses"
+          value={this.state.pickertags}
+          onChange={tags => this.setState({
+            pickertags: tags, 
+            tags: tags.map(tag => tag.value),
+          })}
+          mode={Picker.modes.MULTI}
+          containerStyle={{marginBottom: 20}}
+        >
+          {this.state.availableTags.map((tag) => <Picker.Item key={tag} value={tag} label={tag}/>)}
+        </Picker>
 
         <Button
           backgroundColor={Colors.green40}
