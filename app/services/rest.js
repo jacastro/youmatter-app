@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const server = 'http://158.69.204.48:19011'
+const server = 'http://youmatter.studionext.com.ar/api'
 
 export const get = async(url, params) => {
   try {
