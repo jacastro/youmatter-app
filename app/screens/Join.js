@@ -31,6 +31,7 @@ export class JoinScreen extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <View useSafeArea margin-20>   
         <Text text20>Registrarme</Text>
         <TextInput
@@ -101,6 +102,7 @@ export class JoinScreen extends React.Component {
           onPress={this.toLogin}
         />
       </View>
+      </ScrollView>
     )
   }
 }
