@@ -110,6 +110,7 @@ export class SearchScreen extends React.Component {
                   <Text text90 color={Colors.green30}>
                     {post.type}
                   </Text>
+                  <Text text90 color={Colors.blue30}> | {post.tags} </Text>
                 </Card.Item>
               </Card.Section>
               <Card.Section>
