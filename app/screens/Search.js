@@ -4,25 +4,7 @@ import { NavigationEvents } from "react-navigation";
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
 import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { getMyPosts } from './../services';
-
-const posts = [
-  {
-    //coverImage: localImageSource,
-    title: 'Amazing Desert',
-    status: 'Published',
-    timestamp: '31 August 2016',
-    description: 'Reference this table when designing your app’s interface, and make sure',
-    likes: 345,
-  },
-  {
-    title: 'New Post',
-    status: 'Draft',
-    timestamp: '07 March 2017',
-    description: 'This is the beginning of a new post',
-    likes: 0,
-  },
-];
+import { getRelatedPosts } from './../services';
 
 export class SearchScreen extends React.Component {
   constructor(props) {
@@ -55,7 +37,7 @@ export class SearchScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    getMyPosts().then((data) => this.setState({ posts: data }))
+    getRelatedPosts().then((data) => this.setState({ posts: data }))
   };
 
   render() {
@@ -113,7 +95,7 @@ export class SearchScreen extends React.Component {
             </View>
           </View>
         </View>
-
+        <Text text40>Podría interesarte...</Text>
         {this.state.posts.map((post,i) => 
           <Card key={i} style={{marginBottom: 15}} onPress={() => console.log('press on a card')}>
             <Card.Image height={160} imageSource={post.coverImage} />

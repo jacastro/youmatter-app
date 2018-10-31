@@ -3,7 +3,7 @@ import { ScrollView, Switch, StyleSheet } from 'react-native';
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
 import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Picker} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { logout, getMyTags, getProfile } from './../services';
+import { logout, getMyTags, getProfile, getMyPosts } from './../services';
 
 export class ProfileScreen extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ export class ProfileScreen extends React.Component {
     this.state = {
       interests: [],
       tags: [],
+      posts: [],
     }
   }
 
@@ -41,6 +42,7 @@ export class ProfileScreen extends React.Component {
   componentWillMount = () => {
     getMyTags().then(({tags, interests}) => this.setState({ tags, interests }))
     getProfile().then((data) => this.setState({ ...data }))
+    getMyPosts().then((data) => this.setState({ posts: data }))
   };
 
   render() {
@@ -98,6 +100,33 @@ export class ProfileScreen extends React.Component {
             </View>
           </View>
         </View>
+
+        <Text text40>Mis Publicaciones</Text>
+
+        {this.state.posts.map((post,i) => 
+          <Card key={i} style={{marginBottom: 15}} onPress={() => console.log('press on a card')}>
+            <Card.Image height={160} imageSource={post.coverImage} />
+            <Card.Section body>
+              <Card.Section>
+                <Text text40 color={Colors.dark10}>
+                  {post.title}
+                </Text>
+              </Card.Section>
+              <Card.Section>
+                <Card.Item>
+                  <Text text90 color={Colors.green30}>
+                    {post.type}
+                  </Text>
+                </Card.Item>
+              </Card.Section>
+              <Card.Section>
+                <Text text70 color={Colors.dark10}>
+                  {post.body}
+                </Text>
+              </Card.Section>
+            </Card.Section>
+          </Card>
+        )}
 
         <Button
           backgroundColor={Colors.red40}

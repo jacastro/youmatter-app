@@ -38,6 +38,12 @@ export const getMyPosts = async () => {
   return posts ? posts : [];
 };
 
+export const getRelatedPosts = async () => {
+  const username = await getUsername();
+  const posts = await get(`users/${username}/related`);
+  return posts ? posts : [];
+};
+
 /*export const join = async (data) => {
   await AsyncStorage.setItem('username', data.username);
 }*/
