@@ -12,10 +12,12 @@ export class JoinScreen extends React.Component {
       tags: [],
       availableTags: [],
       pickertags: [],
+      loading: false,
     }
   }
 
   onJoin = () => {
+    this.setState({loading: true});
     join(this.state).then(() => {
       this.props.navigation.navigate('App')
     })
@@ -32,6 +34,10 @@ export class JoinScreen extends React.Component {
   render() {
     return (
       <ScrollView>
+      {this.state.loading > 0 && <LoaderScreen
+        overlay
+        backgroundColor="#fff"
+      />}
       <View useSafeArea margin-20>   
         <Text text20>Registrarme</Text>
         <TextInput

@@ -68,9 +68,9 @@ export const rate = async (data) => {
 }*/
 
 export const join = async (data) => {
-  put(`users`, data).then(async response => {
+  return put(`users`, data).then(async response => {
     console.log(response)
-    await AsyncStorage.setItem('username', data.username);
+    return await AsyncStorage.setItem('username', data.username);
   });
 };
 
