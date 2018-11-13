@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, Switch, StyleSheet, AlertIOS } from 'react-native';
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
-import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Picker, TagsInput, TextArea} from 'react-native-ui-lib';
+import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Picker, TagsInput, TextArea, Toast} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { getPublicationRates, getPublicationRate, rate } from './../services';
 import { Stars } from './../components/Stars';
@@ -36,7 +36,7 @@ export class PublicationScreen extends React.Component {
       });
       this.setState({ rates, rating: sum / cant });
       console.log(rates, sum / cant )
-    })
+    }).catch(() => this.setState({ showToast: true}))
   }
 
   onRate = (myRate) => {
@@ -64,7 +64,7 @@ export class PublicationScreen extends React.Component {
             }).then((tags) => {
               this.setState({ myRate, loading: false }); 
               this.loadRate();
-            })
+            }).catch(() => this.setState({ showToast: true}))
           }
         },
       ],
@@ -73,16 +73,23 @@ export class PublicationScreen extends React.Component {
 
   render() {
     const { post, myRate, loading, rates, rating } = this.state;
-
-
-    console.log(rating)
     return (
-      <View useSafeArea padding-20 flex style={{backgroundColor: "#fff"}}>
-        {loading && <LoaderScreen
-          overlay
-          backgroundColor={Colors.rgba(Colors.dark80, 0.85)}
-        />}
-        <ScrollView>
+      <ScrollView>
+        <Toast
+          visible={this.state.showToast}
+          position="relative"
+          message="Ocurrió un error al contactarse con el servidor"
+          backgroundColor={Colors.red20}
+          color={Colors.white}
+          allowDismiss
+          onDismiss={() => this.setState({showToast: false})}
+        />
+        <View useSafeArea padding-20 flex style={{backgroundColor: "#fff"}}>
+          {loading && <LoaderScreen
+            overlay
+            backgroundColor={Colors.rgba(Colors.dark80, 0.85)}
+          />}
+        
           <Card.Section body>
             <Card.Section>
               <Text text40 color={Colors.dark10}>
@@ -154,8 +161,8 @@ export class PublicationScreen extends React.Component {
               </Card.Section>
             </Card>)}
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     )
   }
 }

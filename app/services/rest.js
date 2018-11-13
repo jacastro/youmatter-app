@@ -7,9 +7,9 @@ export const get = async(url, params) => {
     const result = await axios.get(`${server}/${url}`,{ params });
     return result.data;
   } catch (error) {
-    console.error(error);
+    throw Error("Error")
   }
-}
+} 
 
 export const put = (url, params) => {
   console.log("PUT", `${server}/${url}`, params) 

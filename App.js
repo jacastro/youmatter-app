@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { ActivityIndicator, Alert, Text } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 
 import Router from './app/router'
 import { JoinScreen } from './app/screens/Join'
@@ -30,7 +30,7 @@ import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
 const AuthStack = createStackNavigator({ SignIn: JoinScreen, LogIn: LoginScreen });
 
-export default createSwitchNavigator(
+const StartApp = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: Router,
@@ -40,3 +40,11 @@ export default createSwitchNavigator(
     initialRouteName: 'AuthLoading',
   }
 );
+
+const App = () => (
+  <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+    <StartApp />
+  </KeyboardAvoidingView>
+)
+
+export default App;

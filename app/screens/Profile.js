@@ -1,7 +1,8 @@
 import React from 'react';
 import { ScrollView, Switch, StyleSheet } from 'react-native';
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
-import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Picker} from 'react-native-ui-lib';
+import { NavigationEvents } from "react-navigation";
+import {View, Badge, Text, Button, ListItem, LoaderScreen, Colors, Card, Avatar, Toast} from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { logout, getMyTags, getProfile, getMyPosts } from './../services';
 
@@ -12,6 +13,7 @@ export class ProfileScreen extends React.Component {
       interests: [],
       tags: [],
       posts: [],
+      showToast: false,
     }
   }
 
@@ -40,42 +42,52 @@ export class ProfileScreen extends React.Component {
   }
 
   componentWillMount = () => {
-    getMyTags().then(({tags, interests}) => this.setState({ tags, interests }))
-    getProfile().then((data) => this.setState({ ...data }))
-    getMyPosts().then((data) => this.setState({ posts: data }))
+    getMyTags().then(({tags, interests}) => this.setState({ tags, interests, showToast: false })).catch(() => this.setState({ showToast: true}))
+    getProfile().then((data) => this.setState({ ...data, showToast: false })).catch(() => this.setState({ showToast: true}))
+    getMyPosts().then((data) => this.setState({ posts: data, showToast: false })).catch(() => this.setState({ showToast: true}))
   };
 
   render() {
     return (
       <ScrollView>
-      <View useSafeArea margin-20>
-        <View style={styles.buttons} flexGrow column>
-          {/*<Avatar 
-            containerStyle={{marginVertical: 5}}
-            size={100}
-            imageSource={{uri: 'https://lh3.googleusercontent.com/-CMM0GmT5tiI/AAAAAAAAAAI/AAAAAAAAAAA/-o9gKbC6FVo/s181-c/111308920004613908895.jpg'}}
-          />   */}     
-          <TextInput
-            text50
-            containerStyle={{marginBottom: 10}}
-            floatingPlaceholder
-            onChangeText={this.onChangeText}
-            floatOnFocus
-            value={this.state.name}
-            placeholder="Nombre"
-          />
-
-          <Picker
-            title="Intereses"
-            placeholder="Intereses"
-            value={this.state.interests}
-            onChange={interests => this.setState({interests})}
-            mode={Picker.modes.MULTI}
-            containerStyle={{marginBottom: 20}}
-          >
-            {this.state.tags.map((tag) => <Picker.Item key={tag} value={tag} label={tag}/>)}
-          </Picker>
+        <NavigationEvents
+          onWillFocus={payload => {
+            this.componentWillMount();
+          }}
+        />
+        <Toast
+          visible={this.state.showToast}
+          position="relative"
+          message="Ocurrió un error al contactarse con el servidor"
+          backgroundColor={Colors.red20}
+          color={Colors.white}
+          allowDismiss
+          onDismiss={() => this.setState({showToast: false})}
+        />
+        <View useSafeArea padding-20 flex style={{backgroundColor: "#fff"}}>
+          <Card.Section body>
+            <Card.Section>
+              <Text text40 color={Colors.dark10}>
+                {this.state.name} {this.state.lastName}
+              </Text>
+              <Button
+                backgroundColor={Colors.red40}
+                label="Cerrar Sesión"
+                enableShadow
+                onPress={this.logout}
+              />
+            </Card.Section>
+            <Card.Section>
+              <Text text40 color={Colors.dark10}>
+                {this.state.interests.map(interest => <View key={interest.label} style={styles.interest}>
+                  <Text style={styles.interestText}>{interest.label}</Text>
+                </View>)}
+              </Text>
+              
+            </Card.Section>
+          </Card.Section>
         </View>
+        <View useSafeArea margin-20>
         
 
         {/*<View row flexGrow marginB-30>
@@ -101,7 +113,7 @@ export class ProfileScreen extends React.Component {
           </View>
         </View>*/} 
 
-        <Text text40>Mis Publicaciones</Text>
+        <Text text50 marginB-10>Mis Publicaciones <Text color={Colors.dark40}>@{this.state.username}</Text></Text>
 
         {this.state.posts.map((post,i) => 
           <Card key={i} style={{marginBottom: 15}} onPress={() => console.log('press on a card')}>
@@ -128,13 +140,6 @@ export class ProfileScreen extends React.Component {
           </Card>
         )}
 
-        <Button
-          backgroundColor={Colors.red40}
-          label="Cerrar Sesión"
-          enableShadow
-          onPress={this.logout}
-        />
-
       </View>
       </ScrollView>
     )
@@ -155,5 +160,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     margin: 'auto',
+  },
+  interest: {
+    borderRadius: 50,
+    backgroundColor: Colors.blue10,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  interestText: {
+    color: "#fff"
   }
 });

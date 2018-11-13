@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, Switch, StyleSheet, ActivityIndicator,TouchableHighlight } from 'react-native';
 import { NavigationEvents } from "react-navigation";
 import { Cell, TableView, Section } from 'react-native-tableview-simple';
-import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card} from 'react-native-ui-lib';
+import {View, TextInput, Text, Button, ListItem, LoaderScreen, Colors, Card, Toast } from 'react-native-ui-lib';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Stars } from './../components/Stars';
 import { getRelatedPosts, getSearchPosts } from './../services';
@@ -65,11 +65,11 @@ export class SearchScreen extends React.Component {
 
   onSearch = (search) => {
     this.setState({ search, posts: [], loading: true }, debounce(() => this.getPosts(), 500))
-  };
+  }; 
 
   getPosts = () => {
-    if (this.state.search === '') getRelatedPosts(this.state.tag).then((data) => this.setState({ posts: data, loading: false }))
-    else getSearchPosts(this.state.search, this.state.tag).then((data) => this.setState({ posts: data, loading: false }))
+    if (this.state.search === '') getRelatedPosts(this.state.tag).then((data) => this.setState({ posts: data, loading: false, showToast: false })).catch(() => this.setState({ showToast: true}))
+    else getSearchPosts(this.state.search, this.state.tag).then((data) => this.setState({ posts: data, loading: false, showToast: false })).catch(() => this.setState({ showToast: true}))
   }
 
   render() {
@@ -78,6 +78,15 @@ export class SearchScreen extends React.Component {
 
     return (
       <ScrollView>
+      <Toast
+        visible={this.state.showToast}
+        position="relative"
+        message="Ocurrió un error al contactarse con el servidor"
+        backgroundColor={Colors.red20}
+        color={Colors.white}
+        allowDismiss
+        onDismiss={() => this.setState({showToast: false})}
+      />
       <View useSafeArea margin-20>
         <NavigationEvents
           onWillFocus={payload => {
