@@ -17,6 +17,7 @@ import { Cell, Section, TableView } from 'react-native-tableview-simple';
 import { SearchScreen } from '../screens/Search';
 import { ProfileScreen } from '../screens/Profile';
 import { PublishScreen } from '../screens/Publish';
+import { PublicationScreen } from '../screens/Publication';
 
 const TabNav = createBottomTabNavigator(
   {
@@ -47,28 +48,8 @@ const MenuNavigation = createStackNavigator({
   Root: {
     screen: TabNav,
   },
-  /*Lesson: {
-    screen: LessonScreen,
-    path: '/clase/:name',
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.name}`,
-      headerRight: (
-        <Button
-          onPress={() =>
-            Alert.alert(
-              '¡Atención!',
-              'No podrás salir del examen antes de finalizar el mismo. Tampoco podrás cambiar de pestaña o el examen se anulará',
-              [
-                {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'Continuar', onPress: () => navigation.navigate('Exam')},
-              ],
-              { cancelable: false }
-            )}
-          title="Examen"
-        />
-      ),
-    }),
-  },*/
+  PublicationScreen,
+  SearchByTag: SearchScreen,
 });
 
 export default createStackNavigator(

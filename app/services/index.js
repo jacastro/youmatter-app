@@ -14,7 +14,7 @@ export const publish = async (data) => {
     body: data.body
   }
   const username = await getUsername();
-  await put(`users/${username}/publication`, body);
+  return put(`users/${username}/publication`, body);
 };
 
 export const getProfile = async () => {
@@ -38,10 +38,29 @@ export const getMyPosts = async () => {
   return posts ? posts : [];
 };
 
-export const getRelatedPosts = async () => {
+export const getRelatedPosts = async (tag) => {
   const username = await getUsername();
-  const posts = await get(`users/${username}/related`);
+  const posts = await get(`users/${username}/related`, { tag });
   return posts ? posts : [];
+};
+
+export const getSearchPosts = async (search, tag) => {
+  const username = await getUsername();
+  const posts = await get(`users/${username}/search/${search}`, { tag });
+  return posts ? posts : [];
+};
+
+export const getPublicationRates = async (id) => await get(`publications/${id}/rates`);
+
+export const getPublicationRate = async (id) => await get(`publications/${id}/rating`);
+
+export const rate = async (data) => {
+  const username = await getUsername();
+  const body = await {
+    ...data,
+    username,
+  }
+  return put(`publications/${data.id}/rates`, body);
 };
 
 /*export const join = async (data) => {

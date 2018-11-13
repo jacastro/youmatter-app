@@ -11,11 +11,7 @@ export const get = async(url, params) => {
   }
 }
 
-export const put = async(url, params) => {
-  try {
-    const result = await axios.put(`${server}/${url}`, params);
-    return result.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+export const put = (url, params) => {
+  console.log("PUT", `${server}/${url}`, params) 
+  return axios.put(`${server}/${url}`, params)
+};

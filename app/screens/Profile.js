@@ -50,11 +50,11 @@ export class ProfileScreen extends React.Component {
       <ScrollView>
       <View useSafeArea margin-20>
         <View style={styles.buttons} flexGrow column>
-          <Avatar 
+          {/*<Avatar 
             containerStyle={{marginVertical: 5}}
             size={100}
             imageSource={{uri: 'https://lh3.googleusercontent.com/-CMM0GmT5tiI/AAAAAAAAAAI/AAAAAAAAAAA/-o9gKbC6FVo/s181-c/111308920004613908895.jpg'}}
-          />        
+          />   */}     
           <TextInput
             text50
             containerStyle={{marginBottom: 10}}
@@ -78,7 +78,7 @@ export class ProfileScreen extends React.Component {
         </View>
         
 
-        <View row flexGrow marginB-30>
+        {/*<View row flexGrow marginB-30>
           <View column flexGrow>
             <View style={styles.buttons} centerH>
               <Text text10>50</Text>
@@ -99,7 +99,7 @@ export class ProfileScreen extends React.Component {
               <Text text50>Seguidos</Text>
             </View>
           </View>
-        </View>
+        </View>*/} 
 
         <Text text40>Mis Publicaciones</Text>
 
